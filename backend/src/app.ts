@@ -22,7 +22,8 @@ const apolloServer = new ApolloServer({
 const startApollo = async () => {
   await apolloServer.start();
   app.use("/graphql", expressMiddleware(apolloServer));
-  console.log("GraphQL endpoint ready at http://localhost:3000/graphql");
+  const port = process.env.PORT || 3001;
+  console.log(`GraphQL endpoint ready at http://localhost:${port}/graphql`);
 };
 
 startApollo().catch((err) => {

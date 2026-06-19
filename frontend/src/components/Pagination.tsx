@@ -15,7 +15,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 sm:px-6 mt-6 border-t border-slate-800/80 bg-slate-900/30 rounded-lg">
+    <div className="flex items-center justify-between px-4 py-3 sm:px-6 mt-6 border-t border-slate-200/80 bg-white rounded-lg shadow-xs">
       <div className="flex flex-1 justify-between sm:hidden">
         <Button
           variant="secondary"
@@ -34,9 +34,9 @@ export const Pagination: React.FC<PaginationProps> = ({
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-slate-400">
-            Showing Page <span className="font-semibold text-slate-200">{currentPage}</span> of{" "}
-            <span className="font-semibold text-slate-200">{totalPages}</span>
+          <p className="text-sm text-slate-500">
+            Showing Page <span className="font-semibold text-slate-800">{currentPage}</span> of{" "}
+            <span className="font-semibold text-slate-800">{totalPages}</span>
           </p>
         </div>
         <div className="flex gap-2">

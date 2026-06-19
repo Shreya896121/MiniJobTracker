@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Navbar } from "./components/Navbar";
 import { Dashboard } from "./pages/Dashboard";
 import { CreateApplication } from "./pages/CreateApplication";
 import { EditApplication } from "./pages/EditApplication";
@@ -19,8 +18,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      <Navbar onNavigate={handleNavigate} />
+    <div className="min-h-screen bg-[#f8f9fa] text-slate-850 flex flex-col font-sans">
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         {currentPage === "dashboard" && (
           <Dashboard onNavigate={handleNavigate} />

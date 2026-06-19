@@ -109,10 +109,10 @@ export const CreateApplication: React.FC<CreateApplicationProps> = ({ onNavigate
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-teal-200 to-emerald-200 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
             Add Application
           </h1>
-          <p className="text-slate-400 mt-1">Record a new job application details.</p>
+          <p className="text-slate-500 mt-1">Record a new job application details.</p>
         </div>
         <Button variant="secondary" onClick={() => onNavigate("dashboard")}>
           Back
@@ -120,13 +120,13 @@ export const CreateApplication: React.FC<CreateApplicationProps> = ({ onNavigate
       </div>
 
       {apiError && (
-        <div className="p-4 border border-rose-500/20 bg-rose-500/5 text-rose-400 rounded-lg text-sm">
+        <div className="p-4 border border-rose-200 bg-rose-50 text-rose-700 rounded-lg text-sm shadow-xs font-semibold">
           {apiError}
         </div>
       )}
 
       {successMessage && (
-        <div className="p-4 border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 rounded-lg text-sm">
+        <div className="p-4 border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg text-sm shadow-xs font-semibold">
           {successMessage}
         </div>
       )}
@@ -190,20 +190,20 @@ export const CreateApplication: React.FC<CreateApplicationProps> = ({ onNavigate
           />
 
           <div className="flex flex-col gap-1.5 w-full">
-            <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
               Notes (Optional)
             </label>
             <textarea
               name="notes"
               rows={4}
               placeholder="Any comments, contact info, or steps..."
-              className="px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-transparent transition-all resize-none font-sans"
+              className="px-4 py-2.5 rounded-lg bg-white border border-slate-250 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all resize-none font-sans"
               value={formData.notes}
               onChange={handleChange}
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-800/60">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-150">
             <Button variant="secondary" type="button" onClick={() => onNavigate("dashboard")}>
               Cancel
             </Button>

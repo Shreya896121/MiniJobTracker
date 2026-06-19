@@ -32,7 +32,7 @@ async function main() {
       notes: "Rejected after final round interview. Focus on system design next time.",
     },
     {
-      companyName: "Stripe",
+      companyName: "Google",
       jobTitle: "Full Stack Engineer",
       jobType: "FULL_TIME" as const,
       status: "APPLIED" as const,

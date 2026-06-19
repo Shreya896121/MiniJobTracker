@@ -1,6 +1,6 @@
 import type { Application, CreateApplicationInput, UpdateApplicationInput } from "../types";
 
-const GRAPHQL_URL = import.meta.env.VITE_GRAPHQL_URL || "http://localhost:3000/graphql";
+const GRAPHQL_URL = import.meta.env.VITE_GRAPHQL_URL || "http://localhost:3001/graphql";
 
 export interface PaginatedApplications {
   applications: Application[];
@@ -25,7 +25,17 @@ async function graphqlFetch<T>(query: string, variables?: Record<string, any>): 
     }),
   });
 
-  const responseBody = await res.json();
+  if (!res.ok) {
+    const text = await res.text().catch(() => "No response body");
+    throw new Error(`Server returned HTTP ${res.status}: ${text}`);
+  }
+
+  let responseBody;
+  try {
+    responseBody = await res.json();
+  } catch (err) {
+    throw new Error("Received an invalid non-JSON response from the server.");
+  }
 
   if (responseBody.errors && responseBody.errors.length > 0) {
     throw new Error(responseBody.errors[0].message || "GraphQL request failed");

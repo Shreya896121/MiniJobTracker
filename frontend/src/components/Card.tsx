@@ -8,12 +8,12 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export const Card: React.FC<CardProps> = ({ title, children, className = "", ...props }) => {
   return (
     <div
-      className={`bg-slate-900 border border-slate-800/80 rounded-xl overflow-hidden shadow-xl shadow-slate-950/20 ${className}`}
+      className={`bg-white border border-slate-200/85 rounded-xl overflow-hidden shadow-xs ${className}`}
       {...props}
     >
       {title && (
-        <div className="px-6 py-4 border-b border-slate-800 bg-slate-950/30">
-          <h3 className="text-base font-bold text-slate-100">{title}</h3>
+        <div className="px-6 py-4 border-b border-slate-150 bg-slate-50/50">
+          <h3 className="text-base font-bold text-slate-900">{title}</h3>
         </div>
       )}
       <div className="p-6">{children}</div>
