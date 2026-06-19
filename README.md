@@ -2,6 +2,10 @@
 
 A simple, modern, full-stack Job Application Tracker designed as an internship assignment codebase. It enables users to record, update, filter, and delete their job search entries in a clean, responsive single-page dashboard.
 
+## 🔗 Live Demo
+* **Frontend Application**: [https://mini-job-tracker-delta.vercel.app/](https://mini-job-tracker-delta.vercel.app/)
+* **Backend API**: [https://minijobtracker.onrender.com](https://minijobtracker.onrender.com)
+
 ## Tech Stack
 * **Backend**: Node.js, Express, TypeScript, PostgreSQL, Prisma ORM, Zod
 * **Frontend**: React (Vite), TypeScript, Tailwind CSS v4
