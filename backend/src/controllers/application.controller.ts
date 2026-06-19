@@ -2,7 +2,18 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "../prisma";
 import { createApplicationSchema, updateApplicationSchema } from "../validation/application.validation";
 
-// Create a new application
+export const testDbConnection = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.status(200).json({
+      success: true,
+      message: "Database connection verified successfully!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createApplication = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const parseResult = createApplicationSchema.safeParse(req.body);
@@ -29,7 +40,6 @@ export const createApplication = async (req: Request, res: Response, next: NextF
 };
 import { Prisma, ApplicationStatus } from "@prisma/client";
 
-// Retrieve all applications
 export const getApplications = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { status, search } = req.query;
@@ -58,7 +68,6 @@ export const getApplications = async (req: Request, res: Response, next: NextFun
       ];
     }
 
-    // Get total count for pagination metadata
     const total = await prisma.application.count({ where });
 
     const applications = await prisma.application.findMany({
@@ -87,7 +96,6 @@ export const getApplications = async (req: Request, res: Response, next: NextFun
   }
 };
 
-// Retrieve a single application by ID
 export const getApplicationById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
@@ -120,7 +128,6 @@ export const getApplicationById = async (req: Request, res: Response, next: Next
   }
 };
 
-// Update an application by ID
 export const updateApplication = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
@@ -142,7 +149,6 @@ export const updateApplication = async (req: Request, res: Response, next: NextF
       return;
     }
 
-    // Check if the application exists first
     const existing = await prisma.application.findUnique({
       where: { id },
     });
@@ -169,7 +175,6 @@ export const updateApplication = async (req: Request, res: Response, next: NextF
   }
 };
 
-// Delete an application by ID
 export const deleteApplication = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
@@ -181,7 +186,6 @@ export const deleteApplication = async (req: Request, res: Response, next: NextF
       return;
     }
 
-    // Check if the application exists first
     const existing = await prisma.application.findUnique({
       where: { id },
     });

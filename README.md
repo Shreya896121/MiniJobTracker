@@ -43,7 +43,7 @@ JobTracker/
 ## Setup Instructions
 
 ### Prerequisites
-- Node.js (v20+ recommended)
+- Node.js 
 - PostgreSQL running locally
 
 ### 1. Database Setup
@@ -97,11 +97,31 @@ JobTracker/
 
 ---
 
+## Running Tests
+
+The project includes unit tests for backend validation schemas using Jest.
+
+To run tests:
+1. Navigate to the `backend` directory:
+   ```bash
+   cd backend
+   ```
+2. Execute the test suite:
+   ```bash
+   npm test
+   ```
+
+---
+
 ## API Documentation
+
+The application supports both REST and GraphQL API queries and mutations.
+
+### REST API
 
 All routes are prefixed with `/api`.
 
-### 1. Test Connection
+#### 1. Test Connection
 * **GET `/test-db`**
   * **Description**: Verifies that the server can connect successfully to the database.
   * **Success Response**: `200 OK`
@@ -109,7 +129,7 @@ All routes are prefixed with `/api`.
     { "success": true, "message": "Database connection verified successfully!" }
     ```
 
-### 2. Create Application
+#### 2. Create Application
 * **POST `/applications`**
   * **Description**: Adds a new job application.
   * **Request Body**:
@@ -117,15 +137,15 @@ All routes are prefixed with `/api`.
     {
       "companyName": "Google",
       "jobTitle": "Software Engineer",
-      "jobType": "FULL_TIME", // INTERNSHIP, FULL_TIME, PART_TIME
-      "status": "APPLIED",   // APPLIED, INTERVIEWING, OFFER, REJECTED
+      "jobType": "FULL_TIME", 
+      "status": "APPLIED",  
       "appliedDate": "2026-06-15T00:00:00.000Z",
       "notes": "First round recruiter screen completed."
     }
     ```
   * **Success Response**: `201 Created`
 
-### 3. Get All Applications
+#### 3. Get All Applications
 * **GET `/applications`**
   * **Description**: Fetches all applications. Supports filtering and search parameters.
   * **Query Parameters**:
@@ -133,17 +153,33 @@ All routes are prefixed with `/api`.
     * `search` (optional): Case-insensitive search matched against company name or job title.
   * **Success Response**: `200 OK`
 
-### 4. Get Single Application
+#### 4. Get Single Application
 * **GET `/applications/:id`**
   * **Description**: Retrieves detailed information for a specific application.
   * **Success Response**: `200 OK` / `404 Not Found`
 
-### 5. Update Application
+#### 5. Update Application
 * **PATCH `/applications/:id`**
   * **Description**: Modifies an existing application. Fields in request body are optional.
   * **Success Response**: `200 OK`
 
-### 6. Delete Application
+#### 6. Delete Application
 * **DELETE `/applications/:id`**
   * **Description**: Deletes a job application.
   * **Success Response**: `200 OK`
+
+---
+
+### GraphQL API
+
+The GraphQL endpoint is available at `http://localhost:3000/graphql`. You can open this URL in your browser to access the Apollo Sandbox / GraphQL Playground for interactive queries and mutations.
+
+#### Queries
+* **`applications(status: ApplicationStatus, search: String, page: Int, limit: Int)`**: Retrieves a paginated list of job applications.
+* **`application(id: ID!)`**: Retrieves detailed information for a specific application.
+
+#### Mutations
+* **`createApplication(companyName: String!, jobTitle: String!, jobType: JobType!, status: ApplicationStatus, appliedDate: String!, notes: String)`**: Creates a new job application.
+* **`updateApplication(id: ID!, companyName: String, jobTitle: String, jobType: JobType, status: ApplicationStatus, appliedDate: String, notes: String)`**: Modifies an existing job application.
+* **`deleteApplication(id: ID!)`**: Deletes a job application.
+

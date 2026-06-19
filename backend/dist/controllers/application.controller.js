@@ -3,10 +3,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteApplication = exports.updateApplication = exports.getApplicationById = exports.getApplications = exports.createApplication = void 0;
+exports.deleteApplication = exports.updateApplication = exports.getApplicationById = exports.getApplications = exports.createApplication = exports.testDbConnection = void 0;
 const prisma_1 = __importDefault(require("../prisma"));
 const application_validation_1 = require("../validation/application.validation");
-// Create a new application
+
+const testDbConnection = async (req, res, next) => {
+    try {
+        await prisma_1.default.$queryRaw `SELECT 1`;
+        res.status(200).json({
+            success: true,
+            message: "Database connection verified successfully!",
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.testDbConnection = testDbConnection;
+
 const createApplication = async (req, res, next) => {
     try {
         const parseResult = application_validation_1.createApplicationSchema.safeParse(req.body);
@@ -32,10 +46,13 @@ const createApplication = async (req, res, next) => {
 };
 exports.createApplication = createApplication;
 const client_1 = require("@prisma/client");
-// Retrieve all applications
+
 const getApplications = async (req, res, next) => {
     try {
         const { status, search } = req.query;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const skip = (page - 1) * limit;
         const where = {};
         if (status && typeof status === "string") {
             if (Object.values(client_1.ApplicationStatus).includes(status)) {
@@ -55,15 +72,26 @@ const getApplications = async (req, res, next) => {
                 { jobTitle: { contains: search, mode: "insensitive" } },
             ];
         }
+
+        const total = await prisma_1.default.application.count({ where });
         const applications = await prisma_1.default.application.findMany({
             where,
             orderBy: {
                 createdAt: "desc",
             },
+            skip,
+            take: limit,
         });
+        const totalPages = Math.ceil(total / limit);
         res.status(200).json({
             success: true,
             data: applications,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages,
+            },
         });
     }
     catch (error) {
@@ -71,7 +99,7 @@ const getApplications = async (req, res, next) => {
     }
 };
 exports.getApplications = getApplications;
-// Retrieve a single application by ID
+
 const getApplicationById = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -102,7 +130,7 @@ const getApplicationById = async (req, res, next) => {
     }
 };
 exports.getApplicationById = getApplicationById;
-// Update an application by ID
+
 const updateApplication = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -122,7 +150,7 @@ const updateApplication = async (req, res, next) => {
             });
             return;
         }
-        // Check if the application exists first
+
         const existing = await prisma_1.default.application.findUnique({
             where: { id },
         });
@@ -147,7 +175,7 @@ const updateApplication = async (req, res, next) => {
     }
 };
 exports.updateApplication = updateApplication;
-// Delete an application by ID
+
 const deleteApplication = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -158,7 +186,6 @@ const deleteApplication = async (req, res, next) => {
             });
             return;
         }
-        // Check if the application exists first
         const existing = await prisma_1.default.application.findUnique({
             where: { id },
         });

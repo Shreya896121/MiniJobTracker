@@ -33,7 +33,6 @@ export const CreateApplication: React.FC<CreateApplicationProps> = ({ onNavigate
       ...prev,
       [name]: value,
     }));
-    // Clear error for field when it is changed
     if (errors[name]) {
       setErrors((prev) => {
         const copy = { ...prev };
@@ -93,7 +92,6 @@ export const CreateApplication: React.FC<CreateApplicationProps> = ({ onNavigate
         notes: "",
       });
 
-      // Redirect to dashboard after a short delay
       setTimeout(() => {
         onNavigate("dashboard");
       }, 1500);

@@ -1,7 +1,6 @@
 import prisma from "../src/prisma";
 
 async function main() {
-  // Clear existing data to avoid duplicates
   await prisma.application.deleteMany();
 
   console.log("Seeding initial applications...");

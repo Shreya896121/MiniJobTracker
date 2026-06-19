@@ -37,7 +37,7 @@ describe("Application Validation Schema", () => {
       const invalidData = {
         companyName: "Meta",
         jobTitle: "Software Engineer",
-        jobType: "CONTRACTOR", // Invalid enum value
+        jobType: "CONTRACTOR", 
         status: "APPLIED",
         appliedDate: "2026-06-19T00:00:00.000Z",
       };

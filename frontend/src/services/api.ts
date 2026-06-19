@@ -12,7 +12,6 @@ export interface PaginatedApplications {
   };
 }
 
-// Helper to make GraphQL requests
 async function graphqlFetch<T>(query: string, variables?: Record<string, any>): Promise<T> {
   const res = await fetch(GRAPHQL_URL, {
     method: "POST",

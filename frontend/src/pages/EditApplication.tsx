@@ -28,7 +28,6 @@ export const EditApplication: React.FC<EditApplicationProps> = ({ id, onNavigate
   const [apiError, setApiError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Fetch application details on component mount
   useEffect(() => {
     const loadApplication = async () => {
       try {
@@ -41,7 +40,6 @@ export const EditApplication: React.FC<EditApplicationProps> = ({ id, onNavigate
           jobTitle: app.jobTitle,
           jobType: app.jobType,
           status: app.status,
-          // Extract only YYYY-MM-DD from ISO appliedDate for the date input
           appliedDate: app.appliedDate.split("T")[0],
           notes: app.notes || "",
         });
@@ -64,7 +62,6 @@ export const EditApplication: React.FC<EditApplicationProps> = ({ id, onNavigate
       ...prev,
       [name]: value,
     }));
-    // Clear error for field when it is changed
     if (errors[name]) {
       setErrors((prev) => {
         const copy = { ...prev };
@@ -115,8 +112,6 @@ export const EditApplication: React.FC<EditApplicationProps> = ({ id, onNavigate
       await updateApplication(id, inputData);
 
       setSuccessMessage("Application updated successfully!");
-
-      // Redirect to dashboard after a short delay
       setTimeout(() => {
         onNavigate("dashboard");
       }, 1500);

@@ -3,7 +3,7 @@ import prisma from "../prisma";
 
 export const testDbConnection = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Run a simple query to check the database connection
+
     await prisma.$queryRaw`SELECT 1`;
     res.status(200).json({
       success: true,

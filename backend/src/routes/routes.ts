@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { testDbConnection } from "../controllers/test.controller";
 import {
+  testDbConnection,
   createApplication,
   getApplications,
   getApplicationById,
@@ -9,11 +9,7 @@ import {
 } from "../controllers/application.controller";
 
 const router = Router();
-
-// Test endpoint to verify database connection
 router.get("/test-db", testDbConnection);
-
-// Application CRUD endpoints
 router.post("/applications", createApplication);
 router.get("/applications", getApplications);
 router.get("/applications/:id", getApplicationById);
