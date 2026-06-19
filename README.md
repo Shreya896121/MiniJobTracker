@@ -8,6 +8,34 @@ A simple, modern, full-stack Job Application Tracker designed as an internship a
 
 ---
 
+## Application Walkthrough & Screenshots
+
+Here is a quick look at the interface and core features of the app:
+
+### 1. Main Dashboard
+The home screen lists all your job applications in a clean, modern table. Statuses like `Applied`, `Interviewing`, `Offer`, or `Rejected` are clearly color-coded for quick scanning.
+![Dashboard](images/Dashboard.png)
+
+### 2. Searching & Filtering
+* **Search**: Instantly filter down your list by typing the company name or job title.
+  ![Search](images/Search.png)
+* **Status Filter**: Toggle between statuses to view only your active interviews, received offers, etc.
+  ![Filter](images/Filter.png)
+
+### 3. Viewing & Editing Details
+* **Detail Page**: A spacious, focused view of a single application to read your notes and check the dates.
+  ![DetailPage](images/DetailPage.png)
+* **Edit Screen**: Update your notes, change status, or edit application info as you move along the hiring pipeline.
+  ![EditPage](images/EditPage.png)
+
+### 4. Creating & Deleting Entries
+* **Add Application**: A simple, validated form to quickly log a new application.
+  ![AddApplication](images/AddApplication.png)
+* **Delete Flow**: Clean confirmation prompt before permanently removing an entry.
+  ![DeleteApplcation](images/DeleteApplcation.png)
+
+---
+
 ## Folder Structure
 ```
 JobTracker/
@@ -44,6 +72,8 @@ JobTracker/
 
 ### Prerequisites
 - Node.js 
+- React.js
+- vite
 - PostgreSQL running locally
 
 ### 1. Database Setup
@@ -70,7 +100,11 @@ JobTracker/
    ```bash
    npx prisma migrate dev --name init
    ```
-5. Start the backend development server:
+5. Seed the database with initial mock job applications:
+   ```bash
+   npx prisma db seed
+   ```
+6. Start the backend development server:
    ```bash
    npm run dev
    ```
