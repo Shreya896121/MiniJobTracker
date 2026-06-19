@@ -3,8 +3,9 @@ import { Navbar } from "./components/Navbar";
 import { Dashboard } from "./pages/Dashboard";
 import { CreateApplication } from "./pages/CreateApplication";
 import { EditApplication } from "./pages/EditApplication";
+import { ApplicationDetail } from "./pages/ApplicationDetail";
 
-type Page = "dashboard" | "create" | "edit";
+type Page = "dashboard" | "create" | "edit" | "detail";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>("dashboard");
@@ -29,6 +30,9 @@ function App() {
         )}
         {currentPage === "edit" && (
           <EditApplication id={editId} onNavigate={handleNavigate} />
+        )}
+        {currentPage === "detail" && (
+          <ApplicationDetail id={editId} onNavigate={handleNavigate} />
         )}
       </main>
     </div>

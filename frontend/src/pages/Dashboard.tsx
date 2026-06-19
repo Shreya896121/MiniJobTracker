@@ -4,9 +4,10 @@ import { fetchApplications, deleteApplication } from "../services/api";
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { Button } from "../components/Button";
+import { Pagination } from "../components/Pagination";
 
 interface DashboardProps {
-  onNavigate: (page: "dashboard" | "create" | "edit", editId?: string) => void;
+  onNavigate: (page: "dashboard" | "create" | "edit" | "detail", editId?: string) => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
@@ -15,8 +16,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   const [status, setStatus] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch applications based on filters
+  // Fetch applications based on filters and pagination
   const loadApplications = async () => {
     try {
       setLoading(true);
@@ -24,9 +27,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       const filterParams = {
         status: status === "ALL" ? undefined : status,
         search: search.trim() === "" ? undefined : search,
+        page,
+        limit: 5,
       };
-      const data = await fetchApplications(filterParams);
-      setApplications(data);
+      const res = await fetchApplications(filterParams);
+      setApplications(res.applications);
+      setTotalPages(res.pagination.totalPages);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(msg || "Failed to load applications.");
@@ -35,14 +41,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     }
   };
 
-  // Trigger refetch when filters change
+  // Trigger refetch when filters or page changes
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       loadApplications();
     }, 300); // Debounce search changes
 
     return () => clearTimeout(delayDebounce);
-  }, [search, status]);
+  }, [search, status, page]);
+
+  // Reset page to 1 when filters change
+  const handleSearchChange = (val: string) => {
+    setSearch(val);
+    setPage(1);
+  };
+
+  const handleStatusChange = (val: string) => {
+    setStatus(val);
+    setPage(1);
+  };
 
   // Handle application deletion
   const handleDelete = async (id: string) => {
@@ -51,8 +68,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     }
     try {
       await deleteApplication(id);
-      // Remove from state or refresh
-      setApplications((prev) => prev.filter((app) => app.id !== id));
+      // Reload applications for the current page (to correctly fill the page or show empty state)
+      loadApplications();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       alert(msg || "Failed to delete application.");
@@ -104,14 +121,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             label="Search"
             placeholder="Search by company or job title..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
         </div>
         <div className="w-full md:w-48">
           <Select
             label="Status Filter"
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => handleStatusChange(e.target.value)}
             options={[
               { value: "ALL", label: "All Statuses" },
               { value: "APPLIED", label: "Applied" },
@@ -162,7 +179,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <tbody className="divide-y divide-slate-800/60 bg-transparent">
               {applications.map((app) => (
                 <tr key={app.id} className="hover:bg-slate-900/30 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-200">{app.companyName}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-200">
+                    <button
+                      onClick={() => onNavigate("detail", app.id)}
+                      className="hover:text-teal-400 hover:underline text-left cursor-pointer transition-colors"
+                    >
+                      {app.companyName}
+                    </button>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">{app.jobTitle}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
                     <span className="bg-slate-800/50 px-2 py-1 rounded text-xs font-medium uppercase">
@@ -178,6 +202,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                     {new Date(app.appliedDate).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                    <Button variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => onNavigate("detail", app.id)}>
+                      View
+                    </Button>
                     <Button variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => onNavigate("edit", app.id)}>
                       Edit
                     </Button>
@@ -191,6 +218,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </table>
         </div>
       )}
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 };

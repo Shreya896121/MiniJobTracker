@@ -33,6 +33,10 @@ import { Prisma, ApplicationStatus } from "@prisma/client";
 export const getApplications = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { status, search } = req.query;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 5;
+    const skip = (page - 1) * limit;
+
     const where: Prisma.ApplicationWhereInput = {};
 
     if (status && typeof status === "string") {
@@ -54,16 +58,29 @@ export const getApplications = async (req: Request, res: Response, next: NextFun
       ];
     }
 
+    // Get total count for pagination metadata
+    const total = await prisma.application.count({ where });
+
     const applications = await prisma.application.findMany({
       where,
       orderBy: {
         createdAt: "desc",
       },
+      skip,
+      take: limit,
     });
+
+    const totalPages = Math.ceil(total / limit);
 
     res.status(200).json({
       success: true,
       data: applications,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages,
+      },
     });
   } catch (error) {
     next(error);
